@@ -3,15 +3,14 @@ import styles from './CalculatorInput.module.css';
 
 export default function CalculatorInput({ handleInput }) {
   const [startDate, setStartDate] = useState('');
-  const [loanAmount, setLoanAmount] = useState('');
+  const [loanAmount, setLoanAmount] = useState(0);
   const [installmentInterval, setInstallmentInterval] = useState('daily');
-  const [installmentAmount, setInstallmentAmount] = useState('');
-  const [interestRate, setInterestRate] = useState('');
+  const [installmentAmount, setInstallmentAmount] = useState(0);
+  const [interestRate, setInterestRate] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = e => {
     e.preventDefault();
-
     let data = {
       startDate,
       loanAmount,
@@ -49,7 +48,7 @@ export default function CalculatorInput({ handleInput }) {
           min="0.01"
           step="0.01"
           onChange={e => {
-            setLoanAmount(e.target.value);
+            setLoanAmount(Number.parseFloat(e.target.value));
           }}
         />
       </div>
@@ -82,7 +81,7 @@ export default function CalculatorInput({ handleInput }) {
           min="0.01"
           step="0.01"
           onChange={e => {
-            setInstallmentAmount(e.target.value);
+            setInstallmentAmount(Number.parseFloat(e.target.value));
           }}
         />
       </div>
@@ -98,7 +97,7 @@ export default function CalculatorInput({ handleInput }) {
           max="100"
           step="0.01"
           onChange={e => {
-            setInterestRate(e.target.value);
+            setInterestRate(Number.parseFloat(e.target.value) / 100);
           }}
         />
       </div>
