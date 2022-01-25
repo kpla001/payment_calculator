@@ -5,6 +5,7 @@ import styles from '../styles/Home.module.css';
 
 import CalculatorInput from '../components/CalculatorInput/CalculatorInput';
 import CalculatorOutput from '../components/CalculatorOutput/CalculatorOutput';
+import RepaymentTable from '../components/RepaymentTable/RepaymentTable';
 
 export default function Home() {
   const [inputData, setInputData] = useState(null);
@@ -29,6 +30,12 @@ export default function Home() {
           // !!inputData &&
           <CalculatorOutput inputData={inputData} />
         }
+        <RepaymentTable
+          loanAmount={10000}
+          interestAmount={2000}
+          numberOfPayments={12}
+          paymentAmount={1000}
+        />
       </main>
     </div>
   );
