@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import RepaymentTable from '../RepaymentTable/RepaymentTable';
 import styles from './CalculatorOutput.module.css';
 
 export default function CalculatorOutput({ inputData }) {
@@ -41,5 +42,16 @@ export default function CalculatorOutput({ inputData }) {
   //   console.log(weekend(date));
   //   function calculate(date, amount, interval, installment, rate) {}
 
-  return <div></div>;
+  return (
+    <div>
+      {!!inputData && (
+        <RepaymentTable
+          loanAmount={inputData?.loanAmount}
+          interestAmount={!!interestSum && interestSum}
+          numberOfPayments={!!numberOfPayments && numberOfPayments}
+          paymentAmount={inputData?.installmentAmount}
+        />
+      )}
+    </div>
+  );
 }

@@ -10,8 +10,18 @@ export default function RepaymentTable({
     const rows = [];
     for (let i = 0; i < numOfPayments; i++) {
       rows.push({ period: i + 1, payment: paymentAmount, dayOutOf365: i * (365 / 12) });
-      console.log(rows);
     }
+    return (
+      <>
+        {rows.map(row => (
+          <tr key={row.period}>
+            <td>{row.period}</td>
+            <td>{row.payment}</td>
+            <td>{row.dayOutOf365}</td>
+          </tr>
+        ))}
+      </>
+    );
   };
 
   return (
@@ -23,27 +33,7 @@ export default function RepaymentTable({
           <th>Day out of 365</th>
         </tr>
       </thead>
-      <tbody>
-        {listPayments(loanAmount, interestAmount, numberOfPayments, paymentAmount)}
-        {/* <tr>
-          <td>Alfreds Futterkiste</td>
-          <td>Maria Anders</td>
-          <td>Germany</td>
-        </tr>
-        <tr>
-          <td>Centro comercial Moctezuma</td>
-          <td>Francisco Chang</td>
-          <td>Mexico</td>
-        </tr> */}
-      </tbody>
+      <tbody>{listPayments(loanAmount, interestAmount, numberOfPayments, paymentAmount)}</tbody>
     </table>
   );
 }
-
-// return (
-//   <tr>
-//     <td>{i + 1}</td>
-//     <td>{paymentAmount}</td>
-//     <td>{i + 365 / 12}</td>
-//   </tr>
-// );

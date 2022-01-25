@@ -30,12 +30,6 @@ export default function Home() {
           // !!inputData &&
           <CalculatorOutput inputData={inputData} />
         }
-        <RepaymentTable
-          loanAmount={10000}
-          interestAmount={2000}
-          numberOfPayments={12}
-          paymentAmount={1000}
-        />
       </main>
     </div>
   );
