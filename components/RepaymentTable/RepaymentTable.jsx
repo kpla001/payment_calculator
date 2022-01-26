@@ -19,9 +19,7 @@ export default function RepaymentTable({
       if (i === numberOfPayments - 1 && balance - paymentAmount * (i + 1) < 0) {
         rows.push({
           period: i + 1,
-          paymentAmount: Math.round(
-            ((lastPayment[0] + (balance - paymentAmount * (i + 1))) * 100) / 100,
-          ).toFixed(2),
+          paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
           dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
           balance: zero.toFixed(2),
         });
@@ -31,11 +29,11 @@ export default function RepaymentTable({
             period: i + 1,
             paymentAmount: Math.round((paymentAmount * 100) / 100).toFixed(2),
             dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
-            balance: Math.round(((balance - paymentAmount * (i + 1)) * 100) / 100).toFixed(2),
+            balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
           {
             period: i + 2,
-            paymentAmount: Math.round(((balance - paymentAmount * (i + 1)) * 100) / 100).toFixed(2),
+            paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
             dayOutOf365: Math.round((i + 2) * (365 / 12) * 100) / 100,
             balance: zero.toFixed(2),
           },
@@ -45,7 +43,7 @@ export default function RepaymentTable({
           period: i + 1,
           paymentAmount: Math.round((paymentAmount * 100) / 100).toFixed(2),
           dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
-          balance: Math.round(((balance - paymentAmount * (i + 1)) * 100) / 100).toFixed(2),
+          balance: (balance - paymentAmount * (i + 1)).toFixed(2),
         });
       }
     }
