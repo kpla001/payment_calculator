@@ -6,17 +6,24 @@ export default function RepaymentTable({
   numberOfPayments,
   paymentAmount,
 }) {
-  const listPayments = (loan, interest, numOfPayments, payment) => {
+  const listPayments = () => {
     const rows = [];
-    for (let i = 0; i < numOfPayments; i++) {
-      rows.push({ period: i + 1, payment: paymentAmount, dayOutOf365: i * (365 / 12) });
+    const balance = loanAmount + interestAmount;
+    for (let i = 0; i < numberOfPayments; i++) {
+      rows.push({
+        period: i + 1,
+        paymentAmount,
+        dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
+        balance: balance - paymentAmount * (i + 1),
+      });
     }
     return (
       <>
         {rows.map(row => (
           <tr key={row.period}>
             <td>{row.period}</td>
-            <td>{row.payment}</td>
+            <td>{row.paymentAmount}</td>
+            <td>{row.balance}</td>
             <td>{row.dayOutOf365}</td>
           </tr>
         ))}
@@ -29,11 +36,12 @@ export default function RepaymentTable({
       <thead>
         <tr>
           <th>Payment Period</th>
-          <th>Paid Amount</th>
+          <th>Payment</th>
+          <th>Balance</th>
           <th>Day out of 365</th>
         </tr>
       </thead>
-      <tbody>{listPayments(loanAmount, interestAmount, numberOfPayments, paymentAmount)}</tbody>
+      <tbody>{listPayments()}</tbody>
     </table>
   );
 }
