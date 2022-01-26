@@ -50,6 +50,7 @@ export default function CalculatorInput({ handleInput }) {
           onChange={e => {
             setLoanAmount(Number.parseFloat(e.target.value));
           }}
+          required
         />
       </div>
       <div className={styles.inputGroup}>
@@ -62,6 +63,7 @@ export default function CalculatorInput({ handleInput }) {
           onChange={e => {
             setInstallmentInterval(e.target.value);
           }}
+          required
         >
           <option value="daily" defaultValue>
             Daily
@@ -99,6 +101,7 @@ export default function CalculatorInput({ handleInput }) {
           onChange={e => {
             setInterestRate(Number.parseFloat(e.target.value) / 100);
           }}
+          required
         />
       </div>
       <button

@@ -13,7 +13,7 @@ export default function CalculatorOutput({ inputData }) {
         inputData;
       setInterestSum(loanAmount * interestRate);
       setRepaymentSum(loanAmount + loanAmount * interestRate);
-      setNumberOfPayments((loanAmount + loanAmount * interestRate) / installmentAmount);
+      setNumberOfPayments(Math.round((loanAmount + loanAmount * interestRate) / installmentAmount));
 
       //   calculate(startDate, loanAmount, installmentInterval, installmentAmount, interestRate);
     }
@@ -43,9 +43,10 @@ export default function CalculatorOutput({ inputData }) {
   //   function calculate(date, amount, interval, installment, rate) {}
 
   return (
-    <div>
+    <div className={styles.calculatorOutput}>
       {!!inputData && (
         <RepaymentTable
+          repaymentSum={!!repaymentSum && repaymentSum}
           loanAmount={inputData?.loanAmount}
           interestAmount={!!interestSum && interestSum}
           numberOfPayments={!!numberOfPayments && numberOfPayments}
