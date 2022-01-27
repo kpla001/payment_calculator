@@ -6,12 +6,14 @@ export default function RepaymentTable({
   interestAmount,
   numberOfPayments,
   paymentAmount,
+  installmentInterval,
 }) {
   const listPayments = () => {
     const rows = [];
     const balance = loanAmount + interestAmount;
     const lastPayment = [];
     const zero = 0;
+
     for (let i = 0; i < numberOfPayments; i++) {
       if (i === numberOfPayments - 2) {
         lastPayment.push(paymentAmount);
@@ -20,29 +22,29 @@ export default function RepaymentTable({
         rows.push({
           period: i + 1,
           paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
-          dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
+          dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
           balance: zero.toFixed(2),
         });
       } else if (i === numberOfPayments - 1 && balance - paymentAmount * (i + 1) > 0) {
         rows.push(
           {
             period: i + 1,
-            paymentAmount: Math.round((paymentAmount * 100) / 100).toFixed(2),
-            dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
+            paymentAmount: paymentAmount.toFixed(2),
+            dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
             balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
           {
             period: i + 2,
             paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
-            dayOutOf365: Math.round((i + 2) * (365 / 12) * 100) / 100,
+            dayOutOf365: Math.round((i + 2) * (365 / installmentInterval) * 100) / 100,
             balance: zero.toFixed(2),
           },
         );
       } else {
         rows.push({
           period: i + 1,
-          paymentAmount: Math.round((paymentAmount * 100) / 100).toFixed(2),
-          dayOutOf365: Math.round((i + 1) * (365 / 12) * 100) / 100,
+          paymentAmount: paymentAmount.toFixed(2),
+          dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
           balance: (balance - paymentAmount * (i + 1)).toFixed(2),
         });
       }
