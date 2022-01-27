@@ -9,6 +9,7 @@ export default function RepaymentTable({
   numberOfPayments,
   paymentAmount,
   installmentInterval,
+  momentInterval,
 }) {
   const listPayments = () => {
     const rows = [];
@@ -24,7 +25,9 @@ export default function RepaymentTable({
         rows.push({
           period: i + 1,
           paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
-          dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
+          dayOutOf365: moment(moment(loanStartDate).format('MM-DD-YYYY'))
+            .add(momentInterval * (i + 1), 'days')
+            .calendar(),
           balance: zero.toFixed(2),
         });
       } else if (i === numberOfPayments - 1 && balance - paymentAmount * (i + 1) > 0) {
@@ -32,13 +35,17 @@ export default function RepaymentTable({
           {
             period: i + 1,
             paymentAmount: paymentAmount.toFixed(2),
-            dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
+            dayOutOf365: moment(moment(loanStartDate).format('MM-DD-YYYY'))
+              .add(momentInterval * (i + 1), 'days')
+              .calendar(),
             balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
           {
             period: i + 2,
             paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
-            dayOutOf365: Math.round((i + 2) * (365 / installmentInterval) * 100) / 100,
+            dayOutOf365: Mmoment(moment(loanStartDate).format('MM-DD-YYYY'))
+              .add(momentInterval * (i + 2), 'days')
+              .calendar(),
             balance: zero.toFixed(2),
           },
         );
@@ -46,7 +53,10 @@ export default function RepaymentTable({
         rows.push({
           period: i + 1,
           paymentAmount: paymentAmount.toFixed(2),
-          dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
+          // dayOutOf365: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
+          dayOutOf365: moment(moment(loanStartDate).format('MM-DD-YYYY'))
+            .add(momentInterval * (i + 1), 'days')
+            .calendar(),
           balance: (balance - paymentAmount * (i + 1)).toFixed(2),
         });
       }
@@ -58,7 +68,7 @@ export default function RepaymentTable({
             <td>{row.period}</td>
             <td>{`$ ${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
             <td>{`$ ${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-            <td>{row.dayOutOf365}</td>
+            <td>{moment(row.dayOutOf365).format('MM/DD/YYYY')}</td>
           </tr>
         ))}
       </>
@@ -66,7 +76,7 @@ export default function RepaymentTable({
   };
 
   const startingBalance = repaymentSum && repaymentSum.toFixed(2);
-  console.log(loanStartDate);
+
   return (
     <table>
       <thead>
@@ -82,7 +92,7 @@ export default function RepaymentTable({
           <td>0</td>
           <td>{`$ ${(0).toFixed(2)}`}</td>
           <td>{`$ ${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-          <td>{moment(loanStartDate).format('MMMM Do YYYY')}</td>
+          <td>{moment(loanStartDate).format('MM/DD/YYYY')}</td>
         </tr>
         {listPayments()}
       </tbody>

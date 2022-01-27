@@ -8,6 +8,7 @@ export default function CalculatorOutput({ inputData }) {
   const [interestSum, setInterestSum] = useState(0);
   const [numberOfPayments, setNumberOfPayments] = useState(0);
   const [interval, setInterval] = useState(null);
+  const [momentInterval, setMomentInterval] = useState(0);
 
   useEffect(() => {
     if (!!inputData) {
@@ -22,9 +23,18 @@ export default function CalculatorOutput({ inputData }) {
       setInterestSum(loanAmount * interestRate);
       setRepaymentSum(loanAmount + loanAmount * interestRate);
       setNumberOfPayments(Math.round((loanAmount + loanAmount * interestRate) / installmentAmount));
-      if (installmentInterval === 'daily') setInterval(timeInterval.daily);
-      if (installmentInterval === 'weekly') setInterval(timeInterval.weekly);
-      if (installmentInterval === 'monthly') setInterval(timeInterval.monthly);
+      if (installmentInterval === 'daily') {
+        setInterval(timeInterval.daily);
+        setMomentInterval(1);
+      }
+      if (installmentInterval === 'weekly') {
+        setInterval(timeInterval.weekly);
+        setMomentInterval(7);
+      }
+      if (installmentInterval === 'monthly') {
+        setInterval(timeInterval.monthly);
+        setMomentInterval(30);
+      }
     }
   }, [inputData]);
 
@@ -62,6 +72,7 @@ export default function CalculatorOutput({ inputData }) {
           numberOfPayments={!!numberOfPayments && numberOfPayments}
           paymentAmount={inputData?.installmentAmount}
           installmentInterval={!!interval && interval}
+          momentInterval={!!momentInterval && momentInterval}
         />
       )}
     </div>
