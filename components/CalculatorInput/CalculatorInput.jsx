@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import moment from 'moment';
 import styles from './CalculatorInput.module.css';
 
 export default function CalculatorInput({ handleInput }) {
@@ -33,7 +34,7 @@ export default function CalculatorInput({ handleInput }) {
           name="startDate"
           className={styles.inputField}
           onChange={e => {
-            setStartDate(e.target.value);
+            setStartDate(moment(e.target.value).format('MM-DD-YYYY'));
           }}
         />
       </div>

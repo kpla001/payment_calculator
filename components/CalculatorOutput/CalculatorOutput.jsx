@@ -3,6 +3,7 @@ import RepaymentTable from '../RepaymentTable/RepaymentTable';
 import styles from './CalculatorOutput.module.css';
 
 export default function CalculatorOutput({ inputData }) {
+  const [loanStartDate, setLoanStartDate] = useState('');
   const [repaymentSum, setRepaymentSum] = useState(0);
   const [interestSum, setInterestSum] = useState(0);
   const [numberOfPayments, setNumberOfPayments] = useState(0);
@@ -17,14 +18,13 @@ export default function CalculatorOutput({ inputData }) {
         weekly: 52,
         monthly: 12,
       };
+      setLoanStartDate(startDate);
       setInterestSum(loanAmount * interestRate);
       setRepaymentSum(loanAmount + loanAmount * interestRate);
       setNumberOfPayments(Math.round((loanAmount + loanAmount * interestRate) / installmentAmount));
       if (installmentInterval === 'daily') setInterval(timeInterval.daily);
       if (installmentInterval === 'weekly') setInterval(timeInterval.weekly);
       if (installmentInterval === 'monthly') setInterval(timeInterval.monthly);
-
-      //   calculate(startDate, loanAmount, installmentInterval, installmentAmount, interestRate);
     }
   }, [inputData]);
 
@@ -55,6 +55,7 @@ export default function CalculatorOutput({ inputData }) {
     <div className={styles.calculatorOutput}>
       {!!inputData && (
         <RepaymentTable
+          loanStartDate={!!loanStartDate && loanStartDate}
           repaymentSum={!!repaymentSum && repaymentSum}
           loanAmount={inputData?.loanAmount}
           interestAmount={!!interestSum && interestSum}

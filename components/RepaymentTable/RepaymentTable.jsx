@@ -1,6 +1,8 @@
+import moment from 'moment';
 import styles from './RepaymentTable.module.css';
 
 export default function RepaymentTable({
+  loanStartDate,
   repaymentSum,
   loanAmount,
   interestAmount,
@@ -64,7 +66,7 @@ export default function RepaymentTable({
   };
 
   const startingBalance = repaymentSum && repaymentSum.toFixed(2);
-
+  console.log(loanStartDate);
   return (
     <table>
       <thead>
@@ -80,7 +82,7 @@ export default function RepaymentTable({
           <td>0</td>
           <td>{`$ ${(0).toFixed(2)}`}</td>
           <td>{`$ ${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-          <td>0</td>
+          <td>{moment(loanStartDate).format('MMMM Do YYYY')}</td>
         </tr>
         {listPayments()}
       </tbody>
