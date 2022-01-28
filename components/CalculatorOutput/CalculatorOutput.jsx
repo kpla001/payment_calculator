@@ -38,29 +38,6 @@ export default function CalculatorOutput({ inputData }) {
     }
   }, [inputData]);
 
-  const weekend = day => {
-    if (day.getDay() == 6 || day.getDay() == 0) {
-      return true;
-    } else {
-      return false;
-    }
-  };
-
-  const calculateNumberOfPayments = () => {
-    // if (installmentInterval === 'daily') {
-    //   setNumberOfAnnualPayments();
-    // }
-    // if (installmentInterval === 'weekly') {
-    //   setNumberOfAnnualPayments();
-    // }
-    // if (installmentInterval === 'monthly') {
-    //   setNumberOfAnnualPayments();
-    // }
-  };
-
-  //   console.log(weekend(date));
-  //   function calculate(date, amount, interval, installment, rate) {}
-
   return (
     <div className={styles.calculatorOutput}>
       {!!inputData && (
