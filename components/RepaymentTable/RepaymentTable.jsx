@@ -9,7 +9,6 @@ export default function RepaymentTable({
   interestAmount,
   numberOfPayments,
   paymentAmount,
-  installmentInterval,
   momentInterval,
 }) {
   const listPayments = () => {
@@ -20,7 +19,7 @@ export default function RepaymentTable({
 
     for (let i = 0; i < numberOfPayments; i++) {
       const paymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
-        .add(momentInterval * (i + 1), 'days')
+        .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
       if (i === numberOfPayments - 2) {
@@ -30,7 +29,7 @@ export default function RepaymentTable({
         rows.push({
           period: i + 1,
           paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
-          date: paymentDate,
+          date: dateHandler(paymentDate, momentInterval),
           balance: zero.toFixed(2),
         });
       } else if (i === numberOfPayments - 1 && balance - paymentAmount * (i + 1) > 0) {
@@ -38,15 +37,18 @@ export default function RepaymentTable({
           {
             period: i + 1,
             paymentAmount: paymentAmount.toFixed(2),
-            date: paymentDate,
+            date: dateHandler(paymentDate, momentInterval),
             balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
           {
             period: i + 2,
             paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
-            date: moment(moment(loanStartDate).format('MM-DD-YYYY'))
-              .add(momentInterval * (i + 2), 'days')
-              .calendar(),
+            date: dateHandler(
+              moment(moment(loanStartDate).format('MM-DD-YYYY'))
+                .add(Math.floor(momentInterval * (i + 2)), 'days')
+                .calendar(),
+              momentInterval,
+            ),
             balance: zero.toFixed(2),
           },
         );
@@ -54,8 +56,7 @@ export default function RepaymentTable({
         rows.push({
           period: i + 1,
           paymentAmount: paymentAmount.toFixed(2),
-          // date: Math.round((i + 1) * (365 / installmentInterval) * 100) / 100,
-          date: dateHandler(paymentDate),
+          date: dateHandler(paymentDate, momentInterval),
           // moment(moment(loanStartDate).format('MM-DD-YYYY'))
           //   .add(momentInterval * (i + 1), 'days')
           //   .calendar(),
@@ -81,7 +82,7 @@ export default function RepaymentTable({
 
   function isWeekend(day) {
     const checkDay = moment(day).format('dddd');
-    console.log(checkDay);
+    // console.log(checkDay);
     return checkDay == 'Sunday' || checkDay == 'Saturday' ? true : false;
   }
 
@@ -90,16 +91,22 @@ export default function RepaymentTable({
     const reformattedDay = moment(moment(day).format('MM-DD-YYYY')).add(1, 'days').calendar();
     const checkedDay = hd.isHoliday(new Date(`${reformattedDay} 00:00:00 EST+0000`));
     console.log(checkedDay);
-    return checkedDay[0]?.type === 'public' && !checkedDay[0].substitute ? true : false;
+    return checkedDay[0]?.type === 'public' ||
+      (checkedDay[0]?.type === 'public' && checkedDay[0].substitute === true)
+      ? true
+      : false;
   }
 
-  function dateHandler(paymentDate) {
+  function dateHandler(paymentDate, momentInterval) {
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
       const substituteDate = moment(moment(paymentDate).format('MM-DD-YYYY'))
         .add(1, 'days')
         .calendar();
-      console.log(substituteDate);
-      return dateHandler(substituteDate);
+      console.log(
+        '🚀 ~ file: RepaymentTable.jsx ~ line 105 ~ dateHandler ~ substituteDate',
+        substituteDate,
+      );
+      return dateHandler(substituteDate, momentInterval);
     } else {
       return paymentDate;
     }
@@ -109,7 +116,7 @@ export default function RepaymentTable({
     <table>
       <thead>
         <tr>
-          <th>Payment Period</th>
+          <th> Payment Period</th>
           <th> Payment</th>
           <th> Loan Balance</th>
           <th> Payment Date</th>
@@ -127,3 +134,5 @@ export default function RepaymentTable({
     </table>
   );
 }
+
+//create work-around for invalid dates (array)
