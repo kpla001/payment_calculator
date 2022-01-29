@@ -22,11 +22,11 @@ export default function RepaymentTable({
     };
 
     for (let i = 0; i < numberOfPayments; i++) {
-      const paymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
+      const paymentDate = moment(moment(loanStartDate, 'MM-DD-YYYY').format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
-      const finalPaymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
+      const finalPaymentDate = moment(moment(loanStartDate, 'MM-DD-YYYY').format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 2)), 'days')
         .calendar();
 
@@ -72,13 +72,13 @@ export default function RepaymentTable({
             momentInterval === 1
               ? dateHandler.daily(paymentDate)
               : dateHandler.monthlyAndWeekly(paymentDate),
-          // moment(moment(loanStartDate).format('MM-DD-YYYY'))
-          //   .add(momentInterval * (i + 1), 'days')
-          //   .calendar(),
           balance: (balance - paymentAmount * (i + 1)).toFixed(2),
         });
+        console.log(i, paymentDate);
       }
     }
+
+    const firstWord = string => string.split(' ')[0];
     return (
       <>
         {rows.map(row => (
@@ -86,7 +86,7 @@ export default function RepaymentTable({
             <td>{row.period}</td>
             <td>{`$ ${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
             <td>{`$ ${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-            <td>{moment(row.date).format('MM/DD/YYYY')}</td>
+            <td>{firstWord(row.date)}</td>
           </tr>
         ))}
       </>
@@ -110,9 +110,7 @@ export default function RepaymentTable({
 
   function monthlyAndWeeklyDateHandler(paymentDate) {
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
-      const substituteDate = moment(moment(paymentDate).format('MM-DD-YYYY'))
-        .add(1, 'days')
-        .calendar();
+      const substituteDate = moment(paymentDate).add(1, 'days').calendar();
       return monthlyAndWeeklyDateHandler(substituteDate);
     } else {
       return paymentDate;
@@ -121,12 +119,7 @@ export default function RepaymentTable({
 
   function dailyDateHandler(paymentDate) {
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
-      for (let i = 0; i <= 3; i++) {
-        const substituteDate = moment(moment(paymentDate).format('MM-DD-YYYY'))
-          .add(i, 'days')
-          .calendar();
-        return substituteDate;
-      }
+      const substituteDate = moment(paymentDate).add(1, 'days').calendar();
       return dailyDateHandler(substituteDate);
     } else {
       return paymentDate;
@@ -150,7 +143,14 @@ export default function RepaymentTable({
           <td>0</td>
           <td>{`$ ${(0).toFixed(2)}`}</td>
           <td>{`$ ${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-          <td>{moment(loanStartDate).format('MM/DD/YYYY')}</td>
+          <td>
+            {
+              moment(moment(loanStartDate).format('MM/DD/YYYY'))
+                .add(0, 'days')
+                .calendar()
+                .split(' ')[0]
+            }
+          </td>
         </tr>
         {listPayments(dailyDateHandler, monthlyAndWeeklyDateHandler)}
       </tbody>
