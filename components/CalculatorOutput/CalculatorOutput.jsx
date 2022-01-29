@@ -24,7 +24,7 @@ export default function CalculatorOutput({ inputData }) {
         setMomentInterval(7);
       }
       if (installmentInterval === 'monthly') {
-        setMomentInterval(30);
+        setMomentInterval(30.437);
       }
     }
   }, [inputData]);
