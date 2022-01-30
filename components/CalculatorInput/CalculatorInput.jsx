@@ -24,28 +24,28 @@ export default function CalculatorInput({ handleInput }) {
   };
 
   return (
-    <form>
+    <form className={styles.form}>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="startDate">
+        <label className="form-label" htmlFor="startDate">
           Start Date
         </label>
         <input
           type="date"
           name="startDate"
-          className={styles.inputField}
+          className="form-control"
           onChange={e => {
             setStartDate(moment(e.target.value).format('MM-DD-YYYY'));
           }}
         />
       </div>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="loanAmount">
+        <label className="form-label" htmlFor="loanAmount">
           Loan Amount
         </label>
         <input
           type="number"
           name="loanAmount"
-          className={styles.inputField}
+          className="form-control"
           min="0.01"
           step="0.01"
           onChange={e => {
@@ -55,12 +55,12 @@ export default function CalculatorInput({ handleInput }) {
         />
       </div>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="installmentInterval">
+        <label className="form-label" htmlFor="installmentInterval">
           Installment Interval
         </label>
         <select
           name="installmentInterval"
-          className={styles.inputField}
+          className="form-select"
           onChange={e => {
             setInstallmentInterval(e.target.value);
           }}
@@ -74,13 +74,13 @@ export default function CalculatorInput({ handleInput }) {
         </select>
       </div>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="installmentAmount">
+        <label className="form-label" htmlFor="installmentAmount">
           Installment Amount
         </label>
         <input
           type="number"
           name="installmentAmount"
-          className={styles.inputField}
+          className="form-control"
           min="0.01"
           step="0.01"
           onChange={e => {
@@ -89,13 +89,13 @@ export default function CalculatorInput({ handleInput }) {
         />
       </div>
       <div className={styles.inputGroup}>
-        <label className={styles.label} htmlFor="interestRate">
+        <label className="form-label" htmlFor="interestRate">
           Interest Rate (%)
         </label>
         <input
           type="number"
           name="interestRate"
-          className={styles.inputField}
+          className={'form-control'}
           min="1"
           max="100"
           step="0.01"
@@ -105,9 +105,10 @@ export default function CalculatorInput({ handleInput }) {
           required
         />
       </div>
+      <br />
       <button
         type="submit"
-        className={styles.button}
+        className="btn btn-primary"
         onClick={e => {
           handleSubmit(e);
         }}

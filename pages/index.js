@@ -26,10 +26,7 @@ export default function Home() {
 
       <main className={styles.main}>
         <CalculatorInput handleInput={handleInput} />
-        {
-          // !!inputData &&
-          <CalculatorOutput inputData={inputData} />
-        }
+        <CalculatorOutput inputData={inputData} />
       </main>
     </div>
   );

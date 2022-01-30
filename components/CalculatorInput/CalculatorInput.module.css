@@ -1,0 +1,13 @@
+.form {
+  min-width: 100%;
+}
+
+@media (min-width: 768px) {
+  .form {
+    min-width: 25%;
+  }
+}
+
+.form button {
+  place-self: center;
+}

@@ -80,10 +80,10 @@ export default function RepaymentTable({
     return (
       <>
         {rows.map(row => (
-          <tr key={row.period}>
+          <tr key={row.period} scope="row">
             <td>{row.period}</td>
-            <td>{`$ ${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-            <td>{`$ ${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
+            <td>{`$${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
+            <td>{`$${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
             <td>{row.date.split(' ')[0]}</td>
           </tr>
         ))}
@@ -123,7 +123,7 @@ export default function RepaymentTable({
         .add(1 + i, 'days')
         .calendar();
       skippedDays.push(1);
-      console.log(skippedDays);
+      // console.log(skippedDays);
       return dailyDateHandler(substituteDate, i);
     } else {
       const newPaymentDate = moment(paymentDate).add(howManyDaysSkipped).calendar();
@@ -134,20 +134,20 @@ export default function RepaymentTable({
   const startingBalance = repaymentSum && repaymentSum.toFixed(2);
 
   return (
-    <table>
+    <table className="table">
       <thead>
         <tr>
-          <th> Payment Period</th>
-          <th> Payment</th>
-          <th> Loan Balance</th>
-          <th> Payment Date</th>
+          <th scope="col"> Payment Period</th>
+          <th scope="col"> Payment</th>
+          <th scope="col"> Loan Balance</th>
+          <th scope="col"> Date</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
+        <tr scope="row">
           <td>0</td>
-          <td>{`$ ${(0).toFixed(2)}`}</td>
-          <td>{`$ ${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
+          <td>{`$${(0).toFixed(2)}`}</td>
+          <td>{`$${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
           <td>
             {
               moment(moment(loanStartDate).format('MM/DD/YYYY'))
@@ -162,5 +162,3 @@ export default function RepaymentTable({
     </table>
   );
 }
-
-//create work-around for invalid dates (array)
