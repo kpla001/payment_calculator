@@ -22,11 +22,11 @@ export default function RepaymentTable({
     };
 
     for (let i = 0; i < numberOfPayments; i++) {
-      const paymentDate = moment(moment(loanStartDate, 'MM-DD-YYYY').format('MM-DD-YYYY'))
+      const paymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
-      const finalPaymentDate = moment(moment(loanStartDate, 'MM-DD-YYYY').format('MM-DD-YYYY'))
+      const finalPaymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 2)), 'days')
         .calendar();
 
@@ -39,7 +39,7 @@ export default function RepaymentTable({
           paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
           date:
             momentInterval === 1
-              ? dateHandler.daily(paymentDate)
+              ? dateHandler.daily(paymentDate, i)
               : dateHandler.monthlyAndWeekly(paymentDate),
           balance: zero.toFixed(2),
         });
@@ -50,17 +50,17 @@ export default function RepaymentTable({
             paymentAmount: paymentAmount.toFixed(2),
             date:
               momentInterval === 1
-                ? dateHandler.daily(paymentDate)
+                ? dateHandler.daily(paymentDate, i)
                 : dateHandler.monthlyAndWeekly(paymentDate),
             balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
           {
             period: i + 2,
-            paymentAmount:
+            paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
+            date:
               momentInterval === 1
-                ? dateHandler.daily(finalPaymentDate)
+                ? dateHandler.daily(finalPaymentDate, i + 1)
                 : dateHandler.monthlyAndWeekly(finalPaymentDate),
-            date: monthlyAndWeeklyDateHandler(),
             balance: zero.toFixed(2),
           },
         );
@@ -70,15 +70,13 @@ export default function RepaymentTable({
           paymentAmount: paymentAmount.toFixed(2),
           date:
             momentInterval === 1
-              ? dateHandler.daily(paymentDate)
+              ? dateHandler.daily(paymentDate, i)
               : dateHandler.monthlyAndWeekly(paymentDate),
           balance: (balance - paymentAmount * (i + 1)).toFixed(2),
         });
-        console.log(i, paymentDate);
       }
     }
 
-    const firstWord = string => string.split(' ')[0];
     return (
       <>
         {rows.map(row => (
@@ -86,7 +84,7 @@ export default function RepaymentTable({
             <td>{row.period}</td>
             <td>{`$ ${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
             <td>{`$ ${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-            <td>{firstWord(row.date)}</td>
+            <td>{row.date.split(' ')[0]}</td>
           </tr>
         ))}
       </>
@@ -117,12 +115,19 @@ export default function RepaymentTable({
     }
   }
 
-  function dailyDateHandler(paymentDate) {
+  function dailyDateHandler(paymentDate, i) {
+    const skippedDays = [];
+    const howManyDaysSkipped = skippedDays.length;
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
-      const substituteDate = moment(paymentDate).add(1, 'days').calendar();
-      return dailyDateHandler(substituteDate);
+      const substituteDate = moment(paymentDate)
+        .add(1 + i, 'days')
+        .calendar();
+      skippedDays.push(1);
+      console.log(skippedDays);
+      return dailyDateHandler(substituteDate, i);
     } else {
-      return paymentDate;
+      const newPaymentDate = moment(paymentDate).add(howManyDaysSkipped).calendar();
+      return newPaymentDate;
     }
   }
 
