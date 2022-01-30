@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import moment from 'moment';
 import styles from './RepaymentTable.module.css';
 import Holidays from 'date-holidays';
@@ -12,16 +11,16 @@ export default function RepaymentTable({
   paymentAmount,
   momentInterval,
 }) {
-  const listPayments = (dailyDateHandler, monthlyAndWeeklyDateHandler) => {
+  const listPayments = monthlyAndWeeklyDateHandler => {
     const rows = [];
     const balance = loanAmount + interestAmount;
     const lastPayment = [];
     const zero = 0;
     const dateHandler = {
-      daily: dailyDateHandler,
       monthlyAndWeekly: monthlyAndWeeklyDateHandler,
     };
 
+    // For daily payments, create an array of non-weekend/non-holiday payment dates
     const dailyPaymentDates = [];
     const skip = [];
     const dailyPaymentDate = loanStartDate;
@@ -30,7 +29,12 @@ export default function RepaymentTable({
       const nextDay = moment(dailyPaymentDate)
         .add(j + 1, 'days')
         .calendar();
-      if (isWeekend(nextDay) === true || isHoliday(nextDay) === true) {
+      if (
+        isWeekend(nextDay) === true ||
+        isHoliday(nextDay) === true ||
+        nextDay.includes('Saturday') === true ||
+        nextDay.includes('Sunday') === true
+      ) {
         skip.push(nextDay);
       } else {
         dailyPaymentDates.push(nextDay);
@@ -38,8 +42,7 @@ export default function RepaymentTable({
       j++;
     }
 
-    console.log(dailyPaymentDates);
-
+    // create an array of payments to loop through with .map
     for (let i = 0; i < numberOfPayments; i++) {
       const paymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
@@ -58,9 +61,7 @@ export default function RepaymentTable({
           period: i + 1,
           paymentAmount: (lastPayment[0] + (balance - paymentAmount * (i + 1))).toFixed(2),
           date:
-            momentInterval === 1
-              ? dateHandler.daily(paymentDate, i)
-              : dateHandler.monthlyAndWeekly(paymentDate),
+            momentInterval === 1 ? dailyPaymentDates[i] : dateHandler.monthlyAndWeekly(paymentDate),
           balance: zero.toFixed(2),
         });
         // If the last payment amount is less than the outstanding balance, then create an additional, last payment to cover the remaining balance
@@ -71,7 +72,7 @@ export default function RepaymentTable({
             paymentAmount: paymentAmount.toFixed(2),
             date:
               momentInterval === 1
-                ? dateHandler.daily(paymentDate, i)
+                ? dailyPaymentDates[i]
                 : dateHandler.monthlyAndWeekly(paymentDate),
             balance: (balance - paymentAmount * (i + 1)).toFixed(2),
           },
@@ -80,7 +81,7 @@ export default function RepaymentTable({
             paymentAmount: (balance - paymentAmount * (i + 1)).toFixed(2),
             date:
               momentInterval === 1
-                ? dateHandler.daily(finalPaymentDate, i + 1)
+                ? dailyPaymentDates[i + 1]
                 : dateHandler.monthlyAndWeekly(finalPaymentDate),
             balance: zero.toFixed(2),
           },
@@ -103,43 +104,16 @@ export default function RepaymentTable({
             <td>{row.period}</td>
             <td>{`$${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
             <td>{`$${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-            <td>{row.date.split(' ')[0]}</td>
+            <td>
+              {row.date.split(' ')[0] === 'Last'
+                ? row.date.split(' ').slice(0, 2).join(' ')
+                : row.date.split(' ')[0]}
+            </td>
           </tr>
         ))}
       </>
     );
   };
-
-  function listDailyPayments() {
-    const dailyPaymentDates = [];
-    const skip = [];
-    const dailyPaymentDate = loanStartDate;
-    let j = 0;
-    while (dailyPaymentDates.length < numberOfPayments) {
-      const nextDay = moment(dailyPaymentDate)
-        .add(j + 1, 'days')
-        .calendar();
-      if (isWeekend(nextDay) === true || isHoliday(nextDay) === true) {
-        skip.push(nextDay);
-      } else {
-        dailyPaymentDates.push(nextDay);
-      }
-      j++;
-    }
-    // console.log(dailyPaymentDates);
-    // return (
-    //   <>
-    //     {rows.map(row => (
-    //       <tr key={row.period} scope="row">
-    //         <td>{row.period}</td>
-    //         <td>{`$${row.paymentAmount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-    //         <td>{`$${row.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
-    //         <td>{row.date.split(' ')[0]}</td>
-    //       </tr>
-    //     ))}
-    //   </>
-    // );
-  }
 
   function isWeekend(day) {
     const checkDay = moment(day).format('dddd');
@@ -160,17 +134,6 @@ export default function RepaymentTable({
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
       const substituteDate = moment(paymentDate).add(1, 'days').calendar();
       return monthlyAndWeeklyDateHandler(substituteDate);
-    } else {
-      return paymentDate;
-    }
-  }
-
-  function dailyDateHandler(paymentDate, i) {
-    if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
-      const substituteDate = moment(paymentDate)
-        .add(1 + i, 'days')
-        .calendar();
-      return dailyDateHandler(substituteDate, i);
     } else {
       return paymentDate;
     }
@@ -202,8 +165,7 @@ export default function RepaymentTable({
             }
           </td>
         </tr>
-        {listPayments(dailyDateHandler, monthlyAndWeeklyDateHandler)}
-        {listDailyPayments()}
+        {listPayments(monthlyAndWeeklyDateHandler)}
       </tbody>
     </table>
   );
