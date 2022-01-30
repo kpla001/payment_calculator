@@ -116,18 +116,13 @@ export default function RepaymentTable({
   }
 
   function dailyDateHandler(paymentDate, i) {
-    const skippedDays = [];
-    const howManyDaysSkipped = skippedDays.length;
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
       const substituteDate = moment(paymentDate)
         .add(1 + i, 'days')
         .calendar();
-      skippedDays.push(1);
-      // console.log(skippedDays);
       return dailyDateHandler(substituteDate, i);
     } else {
-      const newPaymentDate = moment(paymentDate).add(howManyDaysSkipped).calendar();
-      return newPaymentDate;
+      return paymentDate;
     }
   }
 
