@@ -46,12 +46,12 @@ export default function RepaymentTable({
     // create an array of payments to loop through with .map
     for (let i = 0; i < numberOfPayments; i++) {
       const paymentDate = moment
-        .utc(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
+        .parseZone(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
       const finalPaymentDate = moment
-        .utc(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
+        .parseZone(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 2)), 'days')
         .calendar();
 
