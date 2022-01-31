@@ -14,7 +14,7 @@ export default function CalculatorOutput({ inputData }) {
     if (!!inputData) {
       const { startDate, loanAmount, installmentInterval, installmentAmount, interestRate } =
         inputData;
-      setLoanStartDate(moment(startDate).format('MM/DD/YYYY'));
+      setLoanStartDate(moment.parseZone(startDate).format('MM/DD/YYYY'));
       setInterestSum(loanAmount * interestRate);
       setRepaymentSum(loanAmount + loanAmount * interestRate);
       setNumberOfPayments(Math.round((loanAmount + loanAmount * interestRate) / installmentAmount));

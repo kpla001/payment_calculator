@@ -26,7 +26,8 @@ export default function RepaymentTable({
     const dailyPaymentDate = loanStartDate;
     let j = 0;
     while (dailyPaymentDates.length < numberOfPayments + 1) {
-      const nextDay = moment(dailyPaymentDate)
+      const nextDay = moment
+        .utc(dailyPaymentDate)
         .add(j + 1, 'days')
         .calendar();
       if (
@@ -44,11 +45,13 @@ export default function RepaymentTable({
 
     // create an array of payments to loop through with .map
     for (let i = 0; i < numberOfPayments; i++) {
-      const paymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
+      const paymentDate = moment
+        .utc(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
-      const finalPaymentDate = moment(moment(loanStartDate).format('MM-DD-YYYY'))
+      const finalPaymentDate = moment
+        .utc(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 2)), 'days')
         .calendar();
 
@@ -116,13 +119,16 @@ export default function RepaymentTable({
   };
 
   function isWeekend(day) {
-    const checkDay = moment(day).format('dddd');
+    const checkDay = moment.parseZone(day).format('dddd');
     return checkDay == 'Sunday' || checkDay == 'Saturday' ? true : false;
   }
 
   function isHoliday(day) {
     const hd = new Holidays('US');
-    const reformattedDay = moment(moment(day).format('MM-DD-YYYY')).add(1, 'days').calendar();
+    const reformattedDay = moment
+      .utc(moment.parseZone(day).format('MM-DD-YYYY'))
+      .add(1, 'days')
+      .calendar();
     const checkedDay = hd.isHoliday(new Date(`${reformattedDay} 00:00:00 EST+0000`));
     return checkedDay[0]?.type === 'public' ||
       (checkedDay[0]?.type === 'public' && checkedDay[0].substitute === true)
@@ -132,7 +138,7 @@ export default function RepaymentTable({
 
   function monthlyAndWeeklyDateHandler(paymentDate) {
     if (isWeekend(paymentDate) === true || isHoliday(paymentDate) === true) {
-      const substituteDate = moment(paymentDate).add(1, 'days').calendar();
+      const substituteDate = moment.parseZone(paymentDate).add(1, 'days').calendar();
       return monthlyAndWeeklyDateHandler(substituteDate);
     } else {
       return paymentDate;
@@ -158,7 +164,8 @@ export default function RepaymentTable({
           <td>{`$${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
           <td>
             {
-              moment(moment(loanStartDate).format('MM/DD/YYYY'))
+              moment
+                .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
                 .add(0, 'days')
                 .calendar()
                 .split(' ')[0]

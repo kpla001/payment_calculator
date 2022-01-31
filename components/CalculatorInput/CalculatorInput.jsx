@@ -36,7 +36,7 @@ export default function CalculatorInput({ handleInput }) {
           min="1920-01-01"
           max="2130-12-31"
           onChange={e => {
-            setStartDate(moment(e.target.value).format('MM-DD-YYYY'));
+            setStartDate(e.target.value);
           }}
         />
       </div>
