@@ -33,6 +33,8 @@ export default function CalculatorInput({ handleInput }) {
           type="date"
           name="startDate"
           className="form-control"
+          min="1920-01-01"
+          max="2130-12-31"
           onChange={e => {
             setStartDate(moment(e.target.value).format('MM-DD-YYYY'));
           }}
