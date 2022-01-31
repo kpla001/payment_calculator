@@ -27,7 +27,7 @@ export default function RepaymentTable({
     let j = 0;
     while (dailyPaymentDates.length < numberOfPayments + 1) {
       const nextDay = moment
-        .utc(dailyPaymentDate)
+        .parseZone(dailyPaymentDate)
         .add(j + 1, 'days')
         .calendar();
       if (
@@ -126,7 +126,7 @@ export default function RepaymentTable({
   function isHoliday(day) {
     const hd = new Holidays('US');
     const reformattedDay = moment
-      .utc(moment.parseZone(day).format('MM-DD-YYYY'))
+      .parseZone(moment.parseZone(day).format('MM-DD-YYYY'))
       .add(1, 'days')
       .calendar();
     const checkedDay = hd.isHoliday(new Date(`${reformattedDay} 00:00:00 EST+0000`));
@@ -165,7 +165,7 @@ export default function RepaymentTable({
           <td>
             {
               moment
-                .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
+                .parseZone(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
                 .add(0, 'days')
                 .calendar()
                 .split(' ')[0]
