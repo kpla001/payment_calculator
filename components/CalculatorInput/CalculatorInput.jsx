@@ -30,8 +30,7 @@ export default function CalculatorInput({ handleInput }) {
           Start Date
         </label>
         <input
-          type="text"
-          placeholder="mm/dd/yyyy"
+          type="date"
           name="startDate"
           className="form-control"
           min="1920-01-01"
