@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import RepaymentTable from '../RepaymentTable/RepaymentTable';
+import moment from 'moment';
 import styles from './CalculatorOutput.module.css';
 
 export default function CalculatorOutput({ inputData }) {
@@ -13,7 +14,7 @@ export default function CalculatorOutput({ inputData }) {
     if (!!inputData) {
       const { startDate, loanAmount, installmentInterval, installmentAmount, interestRate } =
         inputData;
-      setLoanStartDate(startDate);
+      setLoanStartDate(moment(startDate).format('MM/DD/YYYY'));
       setInterestSum(loanAmount * interestRate);
       setRepaymentSum(loanAmount + loanAmount * interestRate);
       setNumberOfPayments(Math.round((loanAmount + loanAmount * interestRate) / installmentAmount));
