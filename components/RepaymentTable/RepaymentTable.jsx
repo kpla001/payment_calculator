@@ -27,7 +27,7 @@ export default function RepaymentTable({
     let j = 0;
     while (dailyPaymentDates.length < numberOfPayments + 1) {
       const nextDay = moment
-        .parseZone(dailyPaymentDate)
+        .utc(dailyPaymentDate)
         .add(j + 1, 'days')
         .calendar();
       if (
@@ -46,12 +46,12 @@ export default function RepaymentTable({
     // create an array of payments to loop through with .map
     for (let i = 0; i < numberOfPayments; i++) {
       const paymentDate = moment
-        .parseZone(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
+        .utc(moment.utc(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 1)), 'days')
         .calendar();
 
       const finalPaymentDate = moment
-        .parseZone(moment.parseZone(loanStartDate).format('MM-DD-YYYY'))
+        .utc(moment.utc(loanStartDate).format('MM-DD-YYYY'))
         .add(Math.floor(momentInterval * (i + 2)), 'days')
         .calendar();
 
@@ -126,7 +126,7 @@ export default function RepaymentTable({
   function isHoliday(day) {
     const hd = new Holidays('US');
     const reformattedDay = moment
-      .parseZone(moment.parseZone(day).format('MM-DD-YYYY'))
+      .utc(moment.parseZone(day).format('MM-DD-YYYY'))
       .add(1, 'days')
       .calendar();
     const checkedDay = hd.isHoliday(new Date(`${reformattedDay} 00:00:00 EST+0000`));
@@ -165,7 +165,7 @@ export default function RepaymentTable({
           <td>
             {
               moment
-                .parseZone(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
+                .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
                 .add(0, 'days')
                 .calendar()
                 .split(' ')[0]
