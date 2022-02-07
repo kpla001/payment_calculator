@@ -5,7 +5,6 @@ import styles from '../styles/Home.module.css';
 
 import CalculatorInput from '../components/CalculatorInput/CalculatorInput';
 import CalculatorOutput from '../components/CalculatorOutput/CalculatorOutput';
-import RepaymentTable from '../components/RepaymentTable/RepaymentTable';
 
 export default function Home() {
   const [inputData, setInputData] = useState(null);
@@ -16,10 +15,10 @@ export default function Home() {
   return (
     <div className={styles.container}>
       <Head>
-        <title>Uplyft Capital - Repayment Calculator</title>
+        <title>Simple Interest Repayment Calculator</title>
         <meta
-          name="Repayment Calculator for Uplyft Capital dev evaluation"
-          content="Repayment Calculator for Uplyft Capital dev evaluation"
+          name="Simple Interest Repayment Calculator"
+          content="Simple Interest Repayment Calculator"
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
