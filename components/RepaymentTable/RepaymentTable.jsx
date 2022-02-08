@@ -163,29 +163,23 @@ export default function RepaymentTable({
           <td>{`$${(0).toFixed(2)}`}</td>
           <td>{`$${startingBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`}</td>
           <td>
-            {
-              // row.date.split(' ')[0] === 'Last'
-              //   ? row.date.split(' ').slice(0, 2).join(' ')
-              //   : row.date.split(' ')[0]
-
-              moment
-                .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
-                .add(0, 'days')
-                .calendar()
-                .split(' ')[0] === 'Last'
-                ? moment
-                    .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
-                    .add(0, 'days')
-                    .calendar()
-                    .split(' ')
-                    .slice(0, 2)
-                    .join(' ')
-                : moment
-                    .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
-                    .add(0, 'days')
-                    .calendar()
-                    .split(' ')[0]
-            }
+            {moment
+              .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
+              .add(0, 'days')
+              .calendar()
+              .split(' ')[0] === 'Last'
+              ? moment
+                  .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
+                  .add(0, 'days')
+                  .calendar()
+                  .split(' ')
+                  .slice(0, 2)
+                  .join(' ')
+              : moment
+                  .utc(moment.parseZone(loanStartDate).format('MM/DD/YYYY'))
+                  .add(0, 'days')
+                  .calendar()
+                  .split(' ')[0]}
           </td>
         </tr>
         {listPayments(monthlyAndWeeklyDateHandler)}

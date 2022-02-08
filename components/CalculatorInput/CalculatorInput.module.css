@@ -1,13 +1,40 @@
-.form {
-  min-width: 100%;
+.inputContainer {
+  width: 100%;
 }
 
-@media (min-width: 768px) {
+.form {
+  margin: 0.5em 0 0 0;
+  color: #fff;
+}
+
+.form label {
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  div.inputContainer {
+    width: 100%;
+    background-color: #4eb4e4;
+  }
   .form {
-    min-width: 25%;
+    margin: 1em;
+    padding: 1em 0 0 0;
   }
 }
 
-.form button {
-  place-self: center;
+@media (min-width: 768px) {
+  .inputContainer {
+    width: 30%;
+    margin: 0 8em 0 0;
+    background: #4eb4e4;
+    border-radius: 10px;
+  }
+  .form {
+    margin: 4em;
+    min-width: 25%;
+    color: #fff;
+  }
+  .form label {
+    font-size: 1.2em;
+  }
 }
